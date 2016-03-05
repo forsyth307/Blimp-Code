@@ -1,0 +1,34 @@
+/*
+This program adjusts the servo motor up to a given angle and then returns it back to starting position
+
+Be sure to plug the servo into sensorport #1 (S1) or otherwise re-label it in setServoPosition function calls
+*/
+
+#include "NXTServo-lib-UW.c"
+
+const int SV1 = 1; //Digital pin on pwm board
+const int MAX = 30; //Max angle of rotation
+
+
+task main()
+{
+	while (nNxtButtonPressed != 3){} //wait for orange button to be pushed
+	while (nNxtButtonPressed == 3){} //wait for orange button to be released
+	
+	while (nNxtButtonPressed != 3)
+	{
+	
+		for ( int adjust = 0; adjust <= MAX; adjust++ ) //increments servo position one degree at a time
+		{
+			setServoPosition( S1, SV1, adjust ); 
+			wait1Msec(15); //wait 15 milliseconds for servo to reach position
+		}
+		
+		wait1Msec(1000); //wait 1 second between incrementing up and decrementing down
+		
+		for ( int adjust = MAX; adjust >= 0; adjust-- ) //decrements servo position one degree at a time
+			setServoPosition( S1, SV1, adjust );
+		
+		wait1Msec(1000); //wait 1 second between incrementing up and decrementing down
+	}
+}
